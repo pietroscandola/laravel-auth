@@ -24,7 +24,7 @@ export default {
     },
     data(){
         return{
-            title:"Word in Progress",
+            title:"Work in Progress",
         }
     }
 }
