@@ -26,5 +26,5 @@ Route::middleware('auth')
 
 // mappa le rotte non intercettate nelle istruzioni precedenti
 Route::get('{any?}', function () {
-    return view('guest.home');
+    return view('guests.home');
 })->where("any", ".*");
