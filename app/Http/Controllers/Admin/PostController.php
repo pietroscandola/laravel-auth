@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -15,7 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('updated_at', 'DESC')->paginate(10);
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -26,18 +28,31 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $post = new Post();
+        return view('admin.posts.create', compact('post'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param Post $post
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title' => ['required', 'string', Rule::unique('posts')->ignore($post->id), 'min:5'],
+            'content' => 'string',
+            'image' => 'nullable|url',
+        ]);
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->title, '-');
+        $post = new Post();
+        $post->fill($data);
+        $post->save();
+
+        return redirect()->route('admin.posts.index')->with('message', 'Post creato con successo!!')->with('type', 'success');
     }
 
     /**
@@ -54,12 +69,12 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -69,9 +84,18 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title' => ['required', 'string', Rule::unique('posts')->ignore($post->id), 'min:5'],
+            'content' => 'string',
+            'image' => 'nullable|url',
+        ]);
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->title, '-');
+        $post->update($data);
+
+        return redirect()->route('admin.posts.show', $post)->with('message', 'Post creato con successo!!')->with('type', 'success');
     }
 
     /**
@@ -83,6 +107,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect()->route('admin.posts.index')->with("message", "il post $post->title è stato eliminato")->with("type", "danger");
+        return redirect()->route('admin.posts.index')->with("message", "il post $post->title è stato eliminato")->with("type", "success");
     }
 }

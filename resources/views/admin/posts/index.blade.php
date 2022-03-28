@@ -4,12 +4,18 @@
     <header>
         <h1>I miei Posts</h1>
     </header>
+    <div class="d-flex justify-content-end">
+        <a href="{{ route('admin.posts.create') }}" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i>
+            Crea un Nuovo Post
+        </a>
+    </div>
     @if (session('message'))
         <div class="alert alert-{{ session('type') ?? 'info' }}">
             {{ session('message') }}
         </div>
     @endif
-
+    <hr>
     <table class="table">
         <thead>
             <tr>
@@ -38,6 +44,9 @@
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
+                        <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-sm btn-warning">
+                            <i class="fa-solid fa-pencil"></i>
+                        </a>
                     </td>
 
                 </tr>
@@ -50,6 +59,9 @@
             @endforelse
         </tbody>
     </table>
+    @if ($posts->hasPages())
+        {{ $posts->links() }}
+    @endif
 @endsection
 
 @section('scripts')

@@ -8,16 +8,20 @@
         <time>Creato il: {{ $post->created_at }}</time>
     </div>
     @if ($post->image)
-        <img src="{{ $post->image }}" alt="{{ $post->slug }}">
+        <img src="{{ $post->image }}" alt="{{ $post->slug }}" class="img-fluid" width="250">
     @endif
 
     <hr>
     <div class="d-flex align-items-center justify-content-end">
-        <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class='delete_form'>
+        <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" id='delete_form'>
             @method('DELETE')
             @csrf
             <button type="submit" class="btn btn-danger mr-3"><i class="fa-solid fa-trash"></i> Elimina</button>
         </form>
+        <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-warning  mr-3">
+            <i class="fa-solid fa-pencil"></i>
+            Modifica
+        </a>
         <a href=" {{ route('admin.posts.index') }}" class="btn btn-secondary">
             <i class="fa-solid fa-rotate-left"></i>
             Indietro
