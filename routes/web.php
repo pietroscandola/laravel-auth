@@ -22,7 +22,9 @@ Route::middleware('auth')
     ->group(function () {
         Route::get('/', 'HomeController@index')->name('home');
         Route::resource('posts', 'PostController');
-        Route::get('/{any}')->where('any','.*')
+        Route::get('/{any}', function () {
+            abort(404);
+        })->where('any', '.*');
     });
 
 // mappa le rotte non intercettate nelle istruzioni precedenti
