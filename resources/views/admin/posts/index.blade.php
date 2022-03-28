@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+    <header>
+        <h1>I miei Posts</h1>
+    </header>
+    @if (session('message'))
+        <div class="alert alert-{{ session('type') ?? 'info' }}">
+            {{ session('message') }}
+        </div>
+    @endif
+
     <table class="table">
         <thead>
             <tr>
@@ -19,9 +28,16 @@
                     <td>{{ $post->slug }}</td>
                     <td>{{ $post->created_at }}</td>
                     <td class="d-flex justify-content-center align-items-center">
-                        <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-sm btn-primary">
+                        <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-sm btn-primary mr-3">
                             <i class="fa-solid fa-eye"></i>
                         </a>
+                        <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class='delete_form'>
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-danger mr-3">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
 
                 </tr>
@@ -34,4 +50,8 @@
             @endforelse
         </tbody>
     </table>
+@endsection
+
+@section('scripts')
+    <script src={{ asset('js/delete-confirm.js') }} defer></script>
 @endsection
