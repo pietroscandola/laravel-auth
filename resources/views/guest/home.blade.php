@@ -9,6 +9,8 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script src="{{ asset('js/front.js') }}" defer></script>
 
     <!-- Styles -->
     <style>
@@ -65,8 +67,7 @@
         }
 
     </style>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <script src="{{ asset('js/front.js') }}" defer></script>
+
 </head>
 
 <body>
@@ -74,7 +75,7 @@
         @if (Route::has('login'))
             <div class="top-right links">
                 @auth
-                    <a href="{{ url('/home') }}">Home</a>
+                    <a href="{{ url('/admin') }}">Home</a>
                 @else
                     <a href="{{ route('login') }}">Login</a>
 
