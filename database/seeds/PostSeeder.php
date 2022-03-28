@@ -20,6 +20,7 @@ class PostSeeder extends Seeder
             $post->content = $faker->paragraphs(2, true);
             $post->image = $faker->imageUrl(360, 360);
             $post->slug = Str::slug($post->title, '-');
+            $post->is_published = 1;
             $post->save();
         }
     }

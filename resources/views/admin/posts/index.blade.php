@@ -22,6 +22,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Title</th>
                 <th scope="col">Slug</th>
+                <th scope="col">Pubblicato il</th>
                 <th scope="col">Created at</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -32,6 +33,17 @@
                     <th scope="row">{{ $post->id }}</th>
                     <td>{{ $post->title }}</td>
                     <td>{{ $post->slug }}</td>
+                    <td class="d-flex align-items-center justify-content-between">
+                        {{ $post->is_published ? 'Pubblicato' : 'Non Pubblicato' }}
+                        <form action="{{ route('admin.posts.toggle', $post->id) }}" method="post">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-outline">
+                                <i
+                                    class="fa-2x fa-solid text-{{ $post->is_published ? 'success' : 'danger' }} {{ $post->is_published ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
+                            </button>
+                        </form>
+                    </td>
                     <td>{{ $post->created_at }}</td>
                     <td class="d-flex justify-content-center align-items-center">
                         <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-sm btn-primary mr-3">

@@ -21,6 +21,7 @@ Route::middleware('auth')
     ->namespace('Admin')
     ->group(function () {
         Route::get('/', 'HomeController@index')->name('home');
+        Route::patch('/posts/{post}/toggle', 'PostController@toggle')->name('posts.toggle');
         Route::resource('posts', 'PostController');
         Route::get('/{any}', function () {
             abort(404);

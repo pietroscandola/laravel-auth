@@ -50,6 +50,9 @@ class PostController extends Controller
         $data['slug'] = Str::slug($request->title, '-');
         $post = new Post();
         $post->fill($data);
+        if (array_key_exists('is_published', $data)) {
+            $post->is_published = 1;
+        }
         $post->save();
 
         return redirect()->route('admin.posts.index')->with('message', 'Post creato con successo!!')->with('type', 'success');
@@ -92,6 +95,13 @@ class PostController extends Controller
             'image' => 'nullable|url',
         ]);
         $data = $request->all();
+
+        if (array_key_exists('is_published', $data)) {
+            $data['is_published'] = 1;
+        } else {
+            $data['is_published'] = 0;
+        }
+
         $data['slug'] = Str::slug($request->title, '-');
         $post->update($data);
 
@@ -108,5 +118,14 @@ class PostController extends Controller
     {
         $post->delete();
         return redirect()->route('admin.posts.index')->with("message", "il post $post->title è stato eliminato")->with("type", "success");
+    }
+
+    public function toggle(Post $post)
+    {
+        $post->is_published = !$post->is_published;
+        $published = $post->is_published ? 'pubblicato' : 'rimosso';
+        $post->save();
+
+        return redirect()->route('admin.posts.index')->with("message", "il post $post->title è stato $published")->with("type", "success");
     }
 }
